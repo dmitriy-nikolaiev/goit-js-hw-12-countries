@@ -1,5 +1,5 @@
 import debounce from 'lodash/debounce';
-import { error, defaults } from '@pnotify/core';
+import { error, defaults, defaultStack } from '@pnotify/core';
 import '@pnotify/core/dist/PNotify.css'; // default styles
 import '@pnotify/core/dist/BrightTheme.css'; // default theme
 
@@ -8,13 +8,21 @@ import countriesService from './js/countries.service';
 import countriesTemplate from './templates/countries-list.hbs';
 import countryTemplate from './templates/country.hbs';
 
-// const messageSettings = {
-//   delay: 3000,
-//   labels: { close: 'Close' },
-// };
-defaults.delay = 4000;
+// defaults.delay = 4000;
+// defaults.animateSpeed = 'fast';
+// defaults.sticker = false;
+// defaults.immediateTransition = true;
 
 const containerRef = document.querySelector('.container');
+
+const displayMessage = text => {
+  error({
+    text,
+    delay: 5000,
+    animateSpeed: 'fast',
+    sticker: false,
+  });
+};
 
 const renderDetails = country =>
   (containerRef.innerHTML = countryTemplate(country));
@@ -27,6 +35,7 @@ const renderList = countries => {
 const getCountries = name => {
   // console.log(name);
   containerRef.innerHTML = '';
+  defaultStack.close(true);
 
   countriesService
     .countriesRequest(name)
@@ -34,9 +43,12 @@ const getCountries = name => {
       if (res.length === 1) {
         renderDetails(res[0]);
       } else if (res.length > 10) {
-        error({
-          text: 'Too many matches found. Please enter a more specific query!',
-        });
+        displayMessage(
+          'Too many matches found. Please enter a more specific query!',
+        );
+        // error({
+        //   text: 'Too many matches found. Please enter a more specific query!',
+        // });
       } else {
         renderList(res);
       }
@@ -46,17 +58,22 @@ const getCountries = name => {
       const errorMsg = message || statusText || 'Unknown error!';
       // console.log(message, '---message');
       // console.log(statusText, '---statusText');
-      error({
-        // text: 'No results were found for this request! ',
-        text: `An error has occurred.\n Error text: ${errorMsg}.`,
-      });
+      displayMessage(`An error has occurred.\n Error text: ${errorMsg}.`);
+
+      // error({
+      //   // text: 'No results were found for this request! ',
+      //   text: `An error has occurred.\n Error text: ${errorMsg}.`,
+      // });
     });
   // .finally(() => console.log('finished!'));
 };
 
 const handleInput = event => {
   const { target } = event;
-  if (target) {
+  // containerRef.innerHTML = '';
+  // defaultStack.close(true);
+  // console.log(target.value);
+  if (target.value) {
     getCountries(target.value);
   }
 };
