@@ -4,6 +4,8 @@ import '@pnotify/core/dist/PNotify.css'; // default styles
 import '@pnotify/core/dist/BrightTheme.css'; // default theme
 
 import './css/styles.css';
+import './css/loader.css';
+
 import countriesService from './js/countries.service';
 import countriesTemplate from './templates/countries-list.hbs';
 import countryTemplate from './templates/country.hbs';
@@ -54,11 +56,16 @@ const getCountries = name => {
       }
     })
     .catch(resError => {
-      const { message, statusText } = resError;
-      const errorMsg = message || statusText || 'Unknown error!';
+      console.log(resError, '---resError');
+      // const { status, message, statusText } = resError;
+      // const errorMsg = message || statusText || status || 'Unknown error!';
+      const { status } = resError;
+      const errorMsg =
+        status === 404 ? 'Not found' : resError || 'Unknown error!';
+      // console.log(status, '---status');
       // console.log(message, '---message');
       // console.log(statusText, '---statusText');
-      displayMessage(`An error has occurred.\n Error text: ${errorMsg}.`);
+      displayMessage(`An error has occurred.\n Status: ${errorMsg}.`);
 
       // error({
       //   // text: 'No results were found for this request! ',
