@@ -2,10 +2,10 @@
   <h1 class="title">{{name}}</h1>
   <div class="wrapper">
     <div class="detail">
-      <p class="detail-title">Capital:<span class="detail-text">{{capital}}</span></p>
-      <p class="detail-title">Population:<span class="detail-text">{{population}}</span></p>
-      <p class="detail-title">​Languages:
-        <ul class="languages-list detail-title">
+      <p class="detail-item"><span class="detail-title">Capital:</span><span class="detail-text">{{capital}}</span></p>
+      <p class="detail-item"><span class="detail-title">Population:</span><span class="detail-text">{{population}}</span></p>
+      <p class="detail-item"><span class="detail-title">Languages:</span>
+        <ul class="languages-list">
         {{#each languages}}
           <li class="languages-list-item detail-text">{{this.name}}</li>
         {{/each}} 
