@@ -13,12 +13,11 @@ import './css/loader.css';
 const containerRef = document.querySelector('.container');
 const loader = loaderCreator('#loader');
 
-const renderDetails = country =>
-  (containerRef.innerHTML = countryTemplate(country));
-
-const renderList = countries =>
-  (containerRef.innerHTML = countriesTemplate(countries));
-
+const render = data => {
+  containerRef.innerHTML = Array.isArray(data)
+    ? countriesTemplate(data)
+    : countryTemplate(data);
+};
 const getCountries = name => {
   containerRef.innerHTML = '';
   message.close();
@@ -28,13 +27,13 @@ const getCountries = name => {
     .fetchCountries(name)
     .then(res => {
       if (res.length === 1) {
-        renderDetails(res[0]);
+        render(res[0]);
       } else if (res.length > 10) {
         message.show(
           'Too many matches found. Please enter a more specific query!',
         );
       } else {
-        renderList(res);
+        render(res);
       }
     })
     .catch(error => {
