@@ -1,7 +1,7 @@
 import debounce from 'lodash/debounce';
 
 import countriesService from './js/fetchCountries';
-import countriesTemplate from './templates/countries-list.hbs';
+import listTemplate from './templates/countries-list.hbs';
 import countryTemplate from './templates/country.hbs';
 
 import message from './js/message';
@@ -11,15 +11,32 @@ import './css/styles.css';
 import './css/loader.css';
 
 const containerRef = document.querySelector('.container');
+const inputRef = document.querySelector('#searchInput');
 const loader = loaderCreator('#loader');
 
 const render = data => {
-  containerRef.innerHTML = Array.isArray(data)
-    ? countriesTemplate(data)
-    : countryTemplate(data);
+  if (Array.isArray(data)) {
+    containerRef.innerHTML = listTemplate(data);
+
+    const listItemRef = document.querySelector('.countries-list');
+
+    listItemRef.addEventListener('click', event => {
+      // if (event.target === listItemRef) {
+      if (event.target.classList.contains('countries-list-item')) {
+        render(data.find(item => item.name === event.target.textContent));
+        inputRef.value = '';
+      }
+    });
+  } else if (data) {
+    containerRef.innerHTML = countryTemplate(data);
+  }
+  //
+  // containerRef.innerHTML = Array.isArray(data)
+  //   ? listTemplate(data)
+  //   : countryTemplate(data);
 };
 const getCountries = name => {
-  containerRef.innerHTML = '';
+  // containerRef.innerHTML = '';
   message.close();
   loader.show();
 
@@ -46,11 +63,10 @@ const getCountries = name => {
 
 const handleInput = event => {
   const { target } = event;
-  // containerRef.innerHTML = '';
+  containerRef.innerHTML = '';
   if (target.value) {
     getCountries(target.value);
   }
 };
 
-const inputRef = document.querySelector('#searchInput');
 inputRef.addEventListener('input', debounce(handleInput, 500));
