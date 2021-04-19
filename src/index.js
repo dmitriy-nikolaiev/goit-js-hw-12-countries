@@ -64,8 +64,8 @@ const getCountries = name => {
 const handleInput = event => {
   const { target } = event;
   containerRef.innerHTML = '';
-  if (target.value) {
-    getCountries(target.value);
+  if (target.value.trim()) {
+    getCountries(target.value.trimStart());
   }
 };
 
