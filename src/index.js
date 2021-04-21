@@ -13,6 +13,9 @@ import './css/loader.css';
 const containerRef = document.querySelector('.container');
 const inputRef = document.querySelector('#searchInput');
 const loader = loaderCreator('#loader');
+const mapRef = document.querySelector('.map');
+
+let selectedElements = [];
 
 const render = data => {
   if (Array.isArray(data)) {
@@ -29,11 +32,8 @@ const render = data => {
     });
   } else if (data) {
     containerRef.innerHTML = countryTemplate(data);
+    renderCountry(data);
   }
-  //
-  // containerRef.innerHTML = Array.isArray(data)
-  //   ? listTemplate(data)
-  //   : countryTemplate(data);
 };
 const getCountries = name => {
   // containerRef.innerHTML = '';
@@ -64,9 +64,30 @@ const getCountries = name => {
 const handleInput = event => {
   const { target } = event;
   containerRef.innerHTML = '';
+  selectedElements.forEach(element => {
+    element.style.fill = '';
+  });
+  selectedElements = [];
+
   if (target.value.trim()) {
     getCountries(target.value.trimStart());
   }
 };
 
 inputRef.addEventListener('input', debounce(handleInput, 500));
+
+const renderCountry = countryData => {
+  selectedElements = mapRef.getElementsByClassName(countryData.name);
+  if (selectedElements.length === 0) {
+    const elemById = mapRef.getElementById(countryData.alpha2Code);
+    if (elemById) {
+      selectedElements = [elemById];
+      // const elemPos = elemById.getBoundingClientRect();
+      // console.log(elemPos, '---elemPos');
+    }
+  }
+
+  selectedElements.forEach(element => {
+    element.style.fill = '#8050c2';
+  });
+};
