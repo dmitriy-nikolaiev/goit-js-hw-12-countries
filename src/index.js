@@ -10,10 +10,16 @@ import loaderCreator from './js/loader.js';
 import './css/styles.css';
 import './css/loader.css';
 
+import mapSVG from './images/world.svg';
+
 const containerRef = document.querySelector('.container');
 const inputRef = document.querySelector('#searchInput');
 const loader = loaderCreator('#loader');
-const mapRef = document.querySelector('.map');
+
+const mapContainer = document.querySelector('.map-wrapper');
+mapContainer.insertAdjacentHTML('afterbegin', mapSVG);
+const mapRef = document.querySelector('.map-wrapper svg');
+mapRef.classList.add('map');
 
 let selectedElements = [];
 

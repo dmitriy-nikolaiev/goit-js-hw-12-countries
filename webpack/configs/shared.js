@@ -18,7 +18,8 @@ module.exports = env => ({
         use: ['babel-loader'],
       },
       {
-        test: /\.(gif|png|jpe?g|svg)$/i,
+        // test: /\.(gif|png|jpe?g|svg)$/i,
+        test: /\.(gif|png|jpe?g)$/i,
         use: [
           {
             loader: 'url-loader',
@@ -31,6 +32,17 @@ module.exports = env => ({
           'img-loader',
         ],
       },
+      {
+        test: /\.svg$/,
+        loader: 'svg-inline-loader',
+      },
+      // {
+      //   test: /\.svg/,
+      //   use: {
+      //     loader: 'svg-url-loader',
+      //     options: {},
+      //   },
+      // },
       {
         test: /\.woff(2)?(\?[a-z0-9#=&.]+)?$/,
         use: [
